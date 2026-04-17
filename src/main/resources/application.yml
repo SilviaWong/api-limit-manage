@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: api-limit-manage
+  
+  # 数据源配置
+  datasource:
+    url: jdbc:postgresql://aws-1-us-east-2.pooler.supabase.com:5432/postgres
+    username: postgres.ljvfnxaubzozgjxdxtrh
+    password: CMmqEjkd1ZtaMUcH
+    driver-class-name: org.postgresql.Driver
+
+  # JPA 与 Hibernate 配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # Redis 配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+
+# MyBatis Plus 配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true # 开启驼峰命名自动映射
+  global-config:
+    db-config:
+      id-type: auto
+
+# 限流策略配置
+# 可选值: fixed-window / sliding-window / leaky-bucket / token-bucket / lua-script
+rate-limit:
+  strategy: fixed-window
