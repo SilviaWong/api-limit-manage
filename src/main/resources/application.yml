@@ -4,23 +4,17 @@ spring:
   
   # 数据源配置
   datasource:
-    url: jdbc:postgresql://aws-1-us-east-2.pooler.supabase.com:5432/postgres
-    username: postgres.ljvfnxaubzozgjxdxtrh
-    password: CMmqEjkd1ZtaMUcH
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
     driver-class-name: org.postgresql.Driver
-
-  # JPA 与 Hibernate 配置
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
 
   # Redis 配置
   data:
     redis:
-      host: localhost
-      port: 6379
-      password: 
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}      
       lettuce:
         pool:
           max-active: 8

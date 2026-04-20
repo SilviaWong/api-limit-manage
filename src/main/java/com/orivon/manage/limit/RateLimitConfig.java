@@ -39,6 +39,7 @@ public class RateLimitConfig {
      * 根据配置选择当前生效的限流策略
      */
     @Bean
+    @org.springframework.context.annotation.Primary
     public RateLimitStrategy currentRateLimitStrategy() {
         String beanName = resolveBeanName(strategy);
 
