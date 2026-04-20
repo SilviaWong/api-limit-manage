@@ -1,111 +1,99 @@
-# API Limit Manage (API 限流与代理管理系统)
+# Orivon API Hub (高性能 API 网关管理平台)
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.5-brightgreen)](https://spring.io/projects/spring-boot)
-[![Java](https://img.shields.io/badge/Java-17-blue)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![Vue](https://img.shields.io/badge/Vue-3.0-blue)](https://vuejs.org/)
+[![Java](https://img.shields.io/badge/Java-17-orange)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ## 📖 项目简介
 
-`api-limit-manage` 是一个基于 Spring Boot 构建的高性能 API 管理与限流系统。它不仅提供了完善的 API 元数据管理功能，还集成了多种分布式限流算法，并支持透明的 API 代理转发。本项目旨在为微服务架构或开放平台提供统一的流量控制、安全验证和审计日志解决方案。
+`Orivon API Hub` 是一个现代化、企业级的 API 管理与安全网关平台。它集成了高性能接口转发、多维度流量控制、全链路审计日志以及可视化的数据看板。本项目采用前后端分离架构，旨在为企业提供统一、安全、可观测的接口开放能力。
+
+---
 
 ## ✨ 核心特性
 
-- **多策略限流**: 深度集成 Redis，提供五种经典限流算法实现：
-  - **固定窗口 (Fixed Window)**: 简单高效的单位时间计数。
-  - **滑动窗口 (Sliding Window)**: 解决临界突发流量问题。
-  - **漏桶算法 (Leaky Bucket)**: 强制平滑流出速率。
-  - **令牌桶算法 (Token Bucket)**: 允许一定程度的突发流量。
-  - **Lua 脚本限流**: 利用 Redis 原子性实现高性能限流。
-- **智能代理**: 内置高效代理服务，支持请求透明转发与动态路由。
-- **安全认证**: 集成 Bouncy Castle 加密库，支持敏感信息的加解密处理（API Key/Secret）。
-- **完整管理体系**:
-  - **API 信息管理**: 定义后端接口地址、描述、状态等。
-  - **单位信息管理**: 关联 API 的所属单位及权限。
-  - **认证管理**: 动态生成与校验 API 访问凭证。
-- **审计日志**: 详细记录每一次 API 调用的耗时、响应状态及访问详情。
+- **🚀 高性能代理转发**: 透明转发市级接口，支持动态路由与 Header 注入，确保低延迟。
+- **📊 可视化监控大盘**: 基于 **ECharts** 实现的实时看板，包含 7 天调用趋势、热点接口 TOP 5 以及异常错误分布统计。
+- **🛡️ 灵活限流体系**: 深度集成 Redis，内置五种经典限流算法（固定窗口、滑动窗口、漏桶、令牌桶、Lua 脚本），支持接口级阈值配置。
+- **🔐 企业级安全认证**: 
+  - 基于 **JWT (JSON Web Token)** 的管理员认证体系。
+  - U-Key/M-Key 双重校验机制，确保调用方身份合法。
+  - 支持 IP 白名单策略。
+- **📝 深度审计日志**: 毫秒级记录每一次转发详情，包括请求参数、响应结果、耗时及错误码。
+- **💎 极简管理 UI**: 使用 Vue 3 + Element Plus 构建的响应式后台，交互体验流畅。
+
+---
 
 ## 🛠️ 技术栈
 
-| 领域 | 技术实现 |
-| :--- | :--- |
-| **核心框架** | Spring Boot 4.0.5 |
-| **编程语言** | Java 17 |
-| **持久层** | MyBatis Plus 3.5.5 & Spring Data JPA |
-| **数据库** | PostgreSQL (Hosted on Supabase) |
-| **缓存/限流器** | Redis (Lettuce 客户端) |
-| **网络请求** | Apache HttpClient5 |
-| **安全加密** | Bouncy Castle (BCPROV) |
-| **其他工具** | Lombok, Commons Lang3, Jackson |
+### 后端 (Backend)
+- **核心框架**: Spring Boot 4.0.5
+- **持久层**: MyBatis Plus 3.5.5
+- **数据库**: PostgreSQL (Supabase 托管)
+- **缓存/限流**: Redis (Lettuce 客户端)
+- **安全**: JJWT (认证), Bouncy Castle (加密)
+- **切面**: Spring AOP (自动日志记录)
+
+### 前端 (Frontend)
+- **框架**: Vue 3 (Composition API)
+- **构建工具**: Vite
+- **UI 组件库**: Element Plus
+- **图表**: ECharts 5.x
+- **请求库**: Axios (集成请求/响应拦截器)
+
+---
 
 ## 🚀 快速开始
 
 ### 1. 环境准备
 - JDK 17+
 - Maven 3.6+
+- Node.js 18+ & pnpm/npm
 - Redis 6.0+
-- PostgreSQL (或直接使用配置好的 Supabase)
 
-### 2. 克隆项目
-```bash
-git clone https://github.com/your-username/api-limit-manage.git
-cd api-limit-manage
-```
+### 2. 后端配置与启动
+1. **配置文件**: 修改 `src/main/resources/application.yml` 中的数据库与 Redis 连接信息。
+2. **运行**:
+   ```bash
+   ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+   ```
+   *默认管理员账号: `admin` / 密码: `admin123`*
 
-### 3. 配置数据库与 Redis
-修改 `src/main/resources/application.yml` 中的相关配置：
+### 3. 前端配置与启动
+1. **进入目录**: `cd frontend`
+2. **安装依赖**: `npm install`
+3. **启动**: `npm run dev`
+4. **访问**: `http://localhost:5173`
 
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://your-db-host:5432/postgres
-    username: your-username
-    password: your-password
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-# 配置默认限流策略
-rate-limit:
-  strategy: fixed-window # 可选: fixed-window / sliding-window / leaky-bucket / token-bucket / lua-script
-```
-
-### 4. 编译与运行
-```bash
-./mvnw clean package
-java -jar target/api-limit-manage-0.0.1-SNAPSHOT.jar
-```
+---
 
 ## 📂 项目结构
 
+### 后端结构
 ```text
 com.orivon.manage
-├── common       # 通用返回对象 (Result) 与工具类 (CryptoUtils)
-├── config       # RestTemplate 与 Web 跨域配置
-├── controller   # REST API 控制器 (API信息、认证、代理)
-├── interceptor  # 代理拦截器逻辑
-├── limit        # 五种限流算法的具体实现
-├── mapper       # MyBatis Plus Mapper 接口
-├── model        # 数据库实体类 (Entity)
-└── service      # 业务逻辑接口及其实现 (Impl)
+├── common       # 全局统一响应 Result、ResultCode
+├── config       # MyBatis-Plus、WebMvc、Jackson、JWT 配置
+├── controller   # REST 控制器 (Dashboard、API管理、Auth、Login)
+├── interceptor  # 网关代理拦截器 (Proxy)、后台鉴权拦截器 (AdminAuth)
+├── limit        # 五种分布式限流算法实现
+├── mapper       # 数据库映射接口
+├── model        # 实体类 (Entity) 与视图对象 (VO)
+└── service      # 业务逻辑层
 ```
 
-## 接口说明 (部分)
+### 前端结构
+```text
+frontend/src
+├── api          # 接口请求模块化 (Dashboard, Api, Auth, Sys)
+├── utils        # axios 封装及拦截器逻辑
+├── views        # 业务页面 (Login, Dashboard, ApiManage, AuthManage, AuditLog)
+├── router       # 路由配置与全局导航守卫
+└── App.vue      # 响应式布局架构 (Sidebar + Header)
+```
 
-| 方法 | 路径 | 说明 |
-| :--- | :--- | :--- |
-| `GET` | `/api/list` | 获取所有 API 信息列表 |
-| `POST` | `/api/add` | 新增 API 接口定义 |
-| `POST` | `/api/auth/generate` | 为指定单位生成访问凭证 |
-| `ALL` | `/proxy/**` | API 代理入口（根据规则转发并计费/限流） |
-
-## 🤝 贡献指南
-
-1. Fork 本项目。
-2. 创建您的特性分支 (`git checkout -b feature/AmazingFeature`)。
-3. 提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
-4. 推送到分支 (`git push origin feature/AmazingFeature`)。
-5. 开启一个 Pull Request。
+---
 
 ## 📄 开源协议
 
